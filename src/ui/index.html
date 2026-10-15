@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkRot-Scanner — استودیوی مانیتورینگ و پالایش لینک‌های خراب</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-area">
+        <div class="logo-badge">🔗 404</div>
+        <div class="logo-text">
+          <h1>LinkRot-Scanner</h1>
+          <span class="subtitle">اسکنر هوشمند لینک‌های مرده، بوکمارک‌های قدیمی و خطاهای ۴۰۴</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="badge zero-dep">Zero-Dependency</span>
+        <button id="btnLoadSample" class="btn btn-secondary">نمونه بوکمارک / مارک‌داون</button>
+      </div>
+    </header>
+
+    <!-- Top Health Metrics Bar -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-title">کل لینک‌ها</span>
+        <span class="metric-value" id="valTotal">۰</span>
+      </div>
+      <div class="metric-card border-green">
+        <span class="metric-title">🟢 سالم (Alive)</span>
+        <span class="metric-value text-green" id="valAlive">۰</span>
+      </div>
+      <div class="metric-card border-yellow">
+        <span class="metric-title">🟡 ریدایرکت (3xx)</span>
+        <span class="metric-value text-yellow" id="valRedirects">۰</span>
+      </div>
+      <div class="metric-card border-red">
+        <span class="metric-title">🔴 مرده (4xx / 404)</span>
+        <span class="metric-value text-red" id="valDead">۰</span>
+      </div>
+      <div class="metric-card border-purple">
+        <span class="metric-title">🟣 خطای سرور و شبکه</span>
+        <span class="metric-value text-purple" id="valErrors">۰</span>
+      </div>
+      <div class="metric-card border-cyan">
+        <span class="metric-title">شاخص سلامت (Score)</span>
+        <span class="metric-value text-cyan" id="valScore">۱۰۰٪</span>
+      </div>
+    </section>
+
+    <!-- Control & Actions Bar -->
+    <section class="control-card">
+      <div class="control-row">
+        <div class="control-item">
+          <label for="concurrencyInput">تعداد اتصالات همزمان:</label>
+          <input type="number" id="concurrencyInput" min="1" max="15" value="5" class="form-input text-center" dir="ltr" />
+        </div>
+        <div class="control-item">
+          <label for="timeoutInput">تایم‌اوت پاسخ (ثانیه):</label>
+          <input type="number" id="timeoutInput" min="1" max="30" value="5" class="form-input text-center" dir="ltr" />
+        </div>
+        <div class="control-actions">
+          <button id="btnStartScan" class="btn btn-primary">شروع پویش و تست لینک‌ها</button>
+          <button id="btnCleanFile" class="btn btn-warning">پالایش و حذف لینک‌های مرده</button>
+          <button id="btnExportReport" class="btn btn-secondary">دریافت گزارش (MD)</button>
+        </div>
+      </div>
+      <!-- Progress Bar -->
+      <div class="progress-wrapper hidden" id="progressWrapper">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">۰٪ در حال بررسی...</span>
+      </div>
+    </section>
+
+    <!-- Main Studio Grid -->
+    <main class="studio-grid">
+      <!-- Left Column: Source Document -->
+      <div class="column">
+        <div class="card editor-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📄</span>
+              <span>سورس سند (Markdown یا بوکمارک HTML)</span>
+            </div>
+            <div class="file-actions">
+              <input type="file" id="fileInput" accept=".html,.md,.txt" class="hidden-file-input" />
+              <button id="btnUploadFile" class="btn btn-secondary btn-sm">بارگذاری فایل</button>
+            </div>
+          </div>
+          <div class="editor-wrapper">
+            <textarea id="sourceContentInput" class="code-textarea" placeholder="متن سند مارک‌داون یا فایل خروجی بوکمارک‌های مرورگر را اینجا جای‌گذاری کنید..." spellcheck="false" dir="ltr"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Audit Results Table -->
+      <div class="column">
+        <div class="card table-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📊</span>
+              <span>نتایج مانیتورینگ لینک‌ها</span>
+            </div>
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+              <button class="filter-btn active" data-filter="all">همه</button>
+              <button class="filter-btn text-red" data-filter="dead">مرده (۴۰۴)</button>
+              <button class="filter-btn text-yellow" data-filter="redirect">ریدایرکت</button>
+              <button class="filter-btn text-green" data-filter="alive">سالم</button>
+            </div>
+          </div>
+          <div class="table-wrapper" id="tableContainer">
+            <div class="empty-state">سندی اضافه کنید و روی «شروع پویش و تست لینک‌ها» کلیک نمایید.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>LinkRot-Scanner &copy; 2026. ساخته شده با Node.js استاندارد و ۱۰۰٪ بدون کتابخانه جانبی.</span>
+      <span>پورت محلی: ۳۰۲۴ &middot; توسعه‌دهنده: <a href="https://github.com/mahdyarmonfared" target="_blank">مهدیار منفرد</a></span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
