@@ -1,0 +1,29 @@
+{
+  "name": "linkrot-scanner",
+  "version": "1.0.0",
+  "description": "Zero-dependency CLI tool and interactive Web Studio for dead link detection, HTML bookmark auditing, and Markdown 404 URL scanning.",
+  "main": "src/core/index.js",
+  "bin": {
+    "linkrot": "./bin/linkrot.js",
+    "linkrot-scanner": "./bin/linkrot.js"
+  },
+  "scripts": {
+    "start": "node bin/linkrot.js ui",
+    "test": "node --test test/**/*.test.js"
+  },
+  "keywords": [
+    "linkrot",
+    "dead-link-checker",
+    "broken-links",
+    "markdown-links",
+    "bookmark-cleaner",
+    "zero-dependency",
+    "devtools",
+    "nodejs"
+  ],
+  "author": "Mahdyar Monfared <mahdyar.monfared09@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
